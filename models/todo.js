@@ -49,6 +49,12 @@ var User = new Schema({
     type: String,
     validate: [function(v){return v.length > 0;}, 'password is required.'],
   },
+  
+  passwordRepeat: {
+  	type: String,
+  	validate: [function(v){return (v.length > 0)&&(v == this.password);}, 'password is not mach.'],
+  },
+  
   created_at: Date,
 });
 
