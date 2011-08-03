@@ -1,0 +1,98 @@
+<html>
+
+
+<head>	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<style type="text/css">
+  #draggable { width: 100px; height: 70px; background: silver; }
+  #droppable { width: 200px; height: 90px; background: silver; }
+</style>
+<!--<script>
+$(document).ready(function() {
+  $("#draggable").draggable();
+  $("#droppable").droppable({
+  	accept:"#draggable",
+  	activeClass:"active",
+  	hoverClass:"hover",
+  	drop:function(event, ui){
+  	}
+  });
+});
+</script>
+  -->
+</head>
+
+<body bgcolor="yellow">
+
+<dl>
+hello ! <%= user.name%>
+</dl>    
+<form action="voted" method="post" class="check">
+<% for (var i=0; i < todos.length; i++) { %>
+<dl>
+<!--<input type="checkbox" name="voteCheck" value=<%=todos[i]._id%> class="voteCheck" <%if(showResult){%> disabled <%}%>>-->
+<select name="mood" class="moodSel">
+	<option>Common</option>
+	<option>Want</option>
+	<option>Dont</option>
+</select>
+<input type="hidden" name="moodHid" value=<%=todos[i]._id%>>
+<%= todos[i].memo%>
+
+<%if(showResult) {%>
+<dd>
+Want:<%= todos[i].wantUsers%>
+</dd>
+<dd>
+Dont:<%= todos[i].dontUsers%>
+</dd>
+<% }%>
+
+</dl>
+<% } %>
+<% if(!showResult) {%>
+<input type="submit" name="sub" value="vote">
+<%}%>
+</form>
+<!--
+<div id="draggable">Drag me</div>
+<div id="droppable">Drop Box</div>-->
+
+<script type="text/javascript">
+
+
+
+var selectmenu=$("select[class=moodSel]");
+selectmenu.change(function(){
+	var select=$(this);
+	if(this.value != "Common"){
+		for(var i=0; i<selectmenu.length; i++){
+			if((this!=selectmenu[i])&&(this.value==selectmenu[i].value)){
+				selectmenu[i].value="Common";
+			}
+		}
+	}
+});
+
+</script>
+
+<!--<script type="text/javascript">
+
+  $('form.check input.voteCheck').change(function(){
+    var checkbox = $(this);
+//    checkbox.val(checkbox.attr('checked') ? 1 : 0);
+    
+    for(var i=0; i<$("input[type=checkbox]").length; i++){
+    	if($("input[type=checkbox]")[i].value!=checkbox[0].value){
+ 				$("input[type=checkbox]")[i].checked="";
+    	}    
+    }
+  });
+</script>-->
+
+
+</body>
+</html>

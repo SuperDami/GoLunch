@@ -1,0 +1,43 @@
+<html>
+<head>	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+</head>
+
+<body bgcolor="gray">
+
+<form action = "add" method = "post">
+<dd>
+<textarea name="m[memo]"cols="60" rows="8"></textarea>
+</dd>
+<dd>
+<input type = "submit" name = "send" value = "add">
+</dd>
+</form>
+
+<form action = "delete" method = "post">
+<% for (var i=0; i < todos.length; i++) { %>
+<dl>
+<input type="checkbox" name="todo_state" value=<%=todos[i]._id%> <% if (todos[i].todo_state != 0) { %>checked="checked"<% } %>/>
+<!--<input type = "text" name = "msg" value = "<%= todos[i].name%>"/>-->
+<%= todos[i].memo%>
+</dl>
+<% } %>
+
+<input type="submit" name = "delete" value = "delete">
+
+</form>
+
+
+<form method="post" action="userManage">
+
+<% for (var i=0; i < users.length; i++) { %>
+<dl>
+<input type="checkbox" name="user_state" value=<%=users[i]._id%> />
+<%= users[i].name%>
+</dl>
+<% } %>
+
+<input type="submit" name="userDel" value="delete user" />
+</form>
+
+</html>

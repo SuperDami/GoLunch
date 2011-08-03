@@ -1,0 +1,46 @@
+<html>
+
+
+<head>	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script></head>
+<body bgcolor="gray">
+
+
+<form action="" method="post" onSubmit="return LoginCheck()">
+<dt>
+user: <input type="text" name="nameInput" value=""/>
+</dt>
+<dt>
+password: <input type="text" name="passwordInput" value=""/>
+</dt>
+<dt>
+<input type="submit" name="submit" value="sign in">
+</dt>
+</form>
+
+<form method="get" action="toResigter">
+<dt>
+<input type="submit" name="signUp" value="sign up">
+</dt>
+</form>
+</html>
+
+<form method="get" action="toManage">
+<dt>
+<input type="submit" name="adminLogin" value="manage">
+</dt>
+</form>
+</html>
+
+<script type="text/javascript">
+
+function LoginCheck()
+{
+	if($("input[type=text]").val()) {
+		return true;
+	}
+	else {
+		alert("enter name plz");
+		return false;
+	}
+}
+</script>
