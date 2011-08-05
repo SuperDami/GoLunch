@@ -13,7 +13,7 @@
 		<key>StateType</key>
 		<string>ProjectWindow</string>
 		<key>TopLeftPoint</key>
-		<string>{65, 876}</string>
+		<string>{378, 878}</string>
 	</dict>
 	<key>com.macrabbit.Espresso.FileManager.DisclosureCollapsed</key>
 	<false/>
@@ -21,7 +21,9 @@
 	<dict>
 		<key>ExpandedURLs</key>
 		<array>
-			<string>file://localhost/Users/czj/node/GoLunch/models</string>
+			<string>file://localhost/Users/czj/node/GoLunch/node_modules</string>
+			<string>file://localhost/Users/czj/node/GoLunch/public</string>
+			<string>file://localhost/Users/czj/node/GoLunch/test</string>
 			<string>file://localhost/Users/czj/node/GoLunch/views</string>
 		</array>
 	</dict>
@@ -46,6 +48,12 @@
 			<dict>
 				<key>DocumentURL</key>
 				<string>file://localhost/Users/czj/node/GoLunch/views/register.ejs</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/czj/node/GoLunch/views/login.ejs</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>

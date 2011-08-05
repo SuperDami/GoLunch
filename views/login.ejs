@@ -5,12 +5,14 @@
 <body bgcolor="gray">
 
 
-<form action="" method="post" onSubmit="return LoginCheck()">
+<form id="login" action="/" method="post" onSubmit="return LoginCheck()">
 <dt>
 user: <input type="text" name="nameInput" value=""/>
+<span class="user"></span>
 </dt>
 <dt>
 password: <input type="text" name="passwordInput" value=""/>
+<span class="password"></span>
 </dt>
 <dt>
 <input type="submit" name="submit" value="sign in">
@@ -35,12 +37,25 @@ password: <input type="text" name="passwordInput" value=""/>
 
 function LoginCheck()
 {
-	if($("input[type=text]").val()) {
-		return true;
+	if($("input[name=nameInput]").val()&&$("input[name=passwordInput]").val()) {
+		$.post("/checkLogin", $("#login").serialize(), function(data){
+			console.log(data);
+			if(data && (data.user||data.password)){
+			
+				for(var k in data){
+					$("span.user").html(data[k]);
+				}
+			}
+			else if(data && data.url){
+				console.log("jump");
+				window.location = data.url;
+			}
+		}, "json");	
 	}
 	else {
-		alert("enter name plz");
-		return false;
+		alert("Enter Name and Password plz");
 	}
+	return false;
 }
+
 </script>

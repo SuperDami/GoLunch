@@ -37,30 +37,56 @@ app.get('/', function(req, res){
   });
 });
 
-app.use(express.cookieParser());
-app.use(express.session({ secret: "User Track" }));
-
-app.post('/', function(req, res){
-//	if(!req.body.nameInput){
-//		res.redirect('/');
-//		return;
-//	}
+app.post('/checkLogin', function(req, res) {
 	ResigUser.find({name:req.body.nameInput}, function(err, user){
 		if(user.length) {
 
 				if(user[0].password == req.body.passwordInput){
 					req.session.items = user[0];
-					res.redirect('/toVote');		
+					res.end(JSON.stringify({url:"/toVote"}));
+					return;		
 				}
 				else {
 					console.log('password error');
+					res.end(JSON.stringify({password:"password error"}));
 				}
 			}	
 			else {
 				console.log("no this user");
+				res.end(JSON.stringify({user:"no this user"}));
 			}	
 	});	
 });
+
+app.use(express.cookieParser());
+app.use(express.session({ secret: "User Track" }));
+
+//app.post('/', function(req, res){
+//	if(!req.body.nameInput){
+//		res.redirect('/');
+//		return;
+//	}
+//	ResigUser.find({name:req.body.nameInput}, function(err, user){
+//		if(user.length) {
+//
+//				if(user[0].password == req.body.passwordInput){
+//					req.session.items = user[0];
+//					res.redirect('/toVote');
+//					return;		
+//				}
+//				else {
+//					console.log('password error');
+//					req.session.errors = {password:"password error"};
+//					res.redirect('/');
+//				}
+//			}	
+//			else {
+//				console.log("no this user");
+//				req.session.errors = {user:"no this user"};
+//				res.redirect('/');
+//			}	
+//	});	
+//});
 
 app.get('/toVote', function(req, res){
   Todo.find({}, function(err, todos) {
@@ -124,39 +150,31 @@ app.get('/toResigter', function(req, res){
 		title:'register page',
 		errors:req.session.errors,
 	});
-	
-//	ResigUser.find({}, function(err, uses) {
-//		console.log(uses);
-//	});
 });
 
-app.post('/registerCheck',function(req, res){
+app.post('/checkResigter',function(req, res){
 
 	ResigUser.find({name: req.body.u.name},function(err, user){
 		if(user.length){
-			console.log("user exist");
-			req.session.errors = "user exist";
-			res.redirect('/toResigter');
+//			req.session.errors = {user:"user exist"};
+//			res.redirect('/toResigter');
+			res.end(JSON.stringify({user:"user exist"}));
 			return;
 		}	
-/*		
-		if(req.body.u.password != req.body.u.passwordRepeat){
-			console.log("password not mach");
-			return;
-		}
-*/		
+		
 		var newUser = new ResigUser(req.body.u);
 		newUser.save(function(err){
 		  if (err){
-		  	console.log('ERROR:' + err);
-		  	req.session.errors = [err];
-		  	res.redirect('/toResigter');
+//		  	req.session.errors = err.errors;
+//		  	res.redirect('/toResigter');
+				res.end(JSON.stringify(err.errors));
 		  	return;
 		  }
 		  
 			console.log("new user add: "+req.body.u);
 			req.session.items = req.body.u;
-			res.redirect('/toVote');	
+			res.end(JSON.stringify({url:"/toVote"}));			
+//			res.redirect('/toVote');	
 					  
 		});
 	});

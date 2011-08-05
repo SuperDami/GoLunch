@@ -5,16 +5,19 @@
 <body bgcolor="gray">
 
 
-<form action="registerCheck" method="post">
+<form id="signup" action="checkResigter" method="post" onSubmit="return registerCheck()">
 
 <dt>
 User Name: <input type="text" name="u[name]" value=""/>
+<span class="name"></span>
 </dt>
 <dt>
 Password: <input type="text" name="u[password]" value=""/>
+<span class="password"></span>
 </dt>
 <dt>
 PasswordRepeat: <input type="text" name="u[passwordRepeat]" value=""/>
+<span class="passwordRepeat"></span>
 </dt>
 
 <dt>
@@ -22,13 +25,23 @@ PasswordRepeat: <input type="text" name="u[passwordRepeat]" value=""/>
 </dt>
 </form>
 
-errors:
-<% console.log(errors)%>
-<%if(errors instanceof Array) { %>
-<% for(var i=0; i<errors.length; i++) { %>
-<dd>
-<%= errors[i] %>
-</dd>
-<% }}%>
-
 </html>
+
+<script type="text/javascript">
+function registerCheck() 
+{
+	$.post("/checkResigter", $("#signup").serialize(), function(data){
+		console.log(data);
+		if(data && data.url){
+			window.location = data.url;
+		}
+		else {
+			for(var k in data){
+				$("span.name").html(data[k]);
+			}
+		}
+	}, "json");
+	
+	return false;
+}
+</script>
