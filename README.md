@@ -1,3 +1,3 @@
-# node.js-sample-app
+# GoLunch
 
-練習用サンプルアプリ
+Polling system for lunch places

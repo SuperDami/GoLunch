@@ -1,0 +1,14 @@
+{
+    "name": "GoLunch"
+  , "version": "0.0.1"
+  , "description": ""
+  , "keywords": []
+  , "author": "Dami <eatdami@gmail.com>"
+  , "dependencies": {
+        "express": ""
+      , "mongoose": ""
+      , "ejs": ""
+    }
+  , "main": "index"
+  , "engines": { "node": "0.4.x" }
+}
