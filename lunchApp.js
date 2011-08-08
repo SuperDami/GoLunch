@@ -214,13 +214,11 @@ app.post('/delete', function(req, res) {
   
   if(ob instanceof Array){
     for(var i=0; i<ob.length; i++){
-    Todo.findById(ob[i], function(err, todo) {
-          
+      Todo.findById(ob[i], function(err, todo) {
         if (err) {
           console(err);
           res.send('Post not found');
         } else {
-    //      todo.todo_state = req.body.todo_state;
           todo.remove(function(err) {
             if (err) {
               console.log(err);
@@ -258,8 +256,7 @@ app.post('/userManage', function(req, res){
   
   if(delUser instanceof Array){
     for(var i=0; i<delUser.length; i++){
-    ResigUser.findById(delUser[i], function(err, user) {
-          
+      ResigUser.findById(delUser[i], function(err, user) {    
         if (err) {
           console(err);
           res.send('Post not found');
@@ -275,7 +272,7 @@ app.post('/userManage', function(req, res){
     }
   }
   else {
-  ResigUser.findById(delUser, function(err, user) {
+    ResigUser.findById(delUser, function(err, user) {
       if (err) {
         console(err);
         res.send('Post not found');
