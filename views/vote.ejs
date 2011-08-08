@@ -10,22 +10,12 @@
   #draggable { width: 100px; height: 70px; background: silver; }
   #droppable { width: 200px; height: 90px; background: silver; }
 </style>
-<!--<script>
-$(document).ready(function() {
-  $("#draggable").draggable();
-  $("#droppable").droppable({
-  	accept:"#draggable",
-  	activeClass:"active",
-  	hoverClass:"hover",
-  	drop:function(event, ui){
-  	}
-  });
-});
-</script>
-  -->
+
+<link rel='stylesheet' href='/stylesheets/vote.css' />
 </head>
 
-<body bgcolor="yellow">
+<body>
+<div id="container" style="width: 200px"></div>
 
 <dl>
 hello ! <%= user.name%>
@@ -45,9 +35,17 @@ hello ! <%= user.name%>
 <%if(showResult) {%>
 <dd>
 Want:<%= todos[i].wantUsers%>
+<% var wantCount = todos[i].wantUsers.length %>
 </dd>
 <dd>
 Dont:<%= todos[i].dontUsers%>
+<% var dontCount = todos[i].dontUsers.length %>
+</dd>
+<dd>
+<div id="want" style="background:green; height:50px; width:<%= wantCount*50 %>px;">
+  <div id="dont" style="background:red; height:50px; width:<%= dontCount*50 %>px;">
+  </div>
+</div>  
 </dd>
 <% }%>
 

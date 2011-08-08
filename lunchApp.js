@@ -1,7 +1,7 @@
 var express = require('express');
 
 var app = module.exports = express.createServer();
-var Model = require('./models/todo.js'),
+var Model = require('./models/data.js'),
     Todo = Model.Todo, ResigUser = Model.User;
 
 // Configuration

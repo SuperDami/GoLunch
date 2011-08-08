@@ -35,7 +35,7 @@
 		<array>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/czj/node/GoLunch/models/todo.js</string>
+				<string>file://localhost/Users/czj/node/GoLunch/models/data.js</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
@@ -54,6 +54,18 @@
 			<dict>
 				<key>DocumentURL</key>
 				<string>file://localhost/Users/czj/node/GoLunch/views/login.ejs</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/czj/node/GoLunch/views/vote.ejs</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/czj/node/GoLunch/public/stylesheets/vote.css</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
