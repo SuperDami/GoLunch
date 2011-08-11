@@ -15,7 +15,6 @@
 </head>
 
 <body>
-<div id="container" style="width: 200px"></div>
 
 <dl>
 hello ! <%= user.name%>
@@ -24,28 +23,52 @@ hello ! <%= user.name%>
 <% for (var i=0; i < todos.length; i++) { %>
 <dl>
 <!--<input type="checkbox" name="voteCheck" value=<%=todos[i]._id%> class="voteCheck" <%if(showResult){%> disabled <%}%>>-->
+<%if(!showResult) {%>
 <select name="mood" class="moodSel">
 	<option>Common</option>
 	<option>Want</option>
 	<option>Dont</option>
 </select>
+<%}%>
 <input type="hidden" name="moodHid" value=<%=todos[i]._id%>>
 <%= todos[i].memo%>
 
+<%var wantList = [];
+ var dontList = [];%>
 <%if(showResult) {%>
-<dd>
+<% for(var j=0; j<daily.length; j++) { %>
+<%  if(daily[j].want == todos[i].memo) {
+      wantList.push(daily[j].voteName);    
+    } 
+    if(daily[j].dont == todos[i].memo) {
+      dontList.push(daily[j].voteName);
+    }%>
+<%}%>
+
+<!--<dd>
 Want:<%= todos[i].wantUsers%>
 <% var wantCount = todos[i].wantUsers.length %>
 </dd>
 <dd>
 Dont:<%= todos[i].dontUsers%>
 <% var dontCount = todos[i].dontUsers.length %>
+</dd>-->
+<dd>
+Want:<%for(var j=0; j<wantList.length; j++) {%>
+<%=wantList[j]%>
+<%}%>
 </dd>
 <dd>
-<div id="want" style="background:green; height:50px; width:<%= wantCount*50 %>px;">
-  <div id="dont" style="background:red; height:50px; width:<%= dontCount*50 %>px;">
-  </div>
-</div>  
+Dont:<%for(var j=0; j<dontList.length; j++) {%>
+<%=dontList[j]%>
+<%}%>
+</dd>
+
+<dd>
+Agree:<div id="want" style="background:green; height:25px; width:<%= wantList.length*50 %>px;">
+</dd>
+<dd>
+Disagree:<div id="dont" style="background:red; height:25px; width:<%= dontList.length*50 %>px;">  
 </dd>
 <% }%>
 
@@ -55,9 +78,6 @@ Dont:<%= todos[i].dontUsers%>
 <input type="submit" name="sub" value="vote">
 <%}%>
 </form>
-<!--
-<div id="draggable">Drag me</div>
-<div id="droppable">Drop Box</div>-->
 
 <script type="text/javascript">
 

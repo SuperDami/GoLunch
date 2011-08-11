@@ -66,5 +66,25 @@ User.pre('save', function(next) {
 });
 
 mongoose.model('User', User);
-
 module.exports.User = db.model('User');
+
+var DailyInf = new Schema({
+  created_at: {
+    type: Date,
+    index: true,
+  },
+  voteName: String,
+  want: String,
+  dont: String,
+});
+
+DailyInf.pre('save', function(next) {
+  if (this.isNew) {
+    var date = new Date();
+    this.created_at = date.toDateString();
+  }
+  next();
+});
+
+mongoose.model('DailyInf', DailyInf);
+module.exports.DailyInf = db.model('DailyInf');

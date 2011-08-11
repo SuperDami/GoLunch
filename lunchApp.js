@@ -2,7 +2,7 @@ var express = require('express');
 
 var app = module.exports = express.createServer();
 var Model = require('./models/data.js'),
-    Todo = Model.Todo, ResigUser = Model.User;
+    Todo = Model.Todo, ResigUser = Model.User, Daily = Model.DailyInf;
 
 // Configuration
 
@@ -86,13 +86,34 @@ app.use(express.session({ secret: "User Track" }));
 //});
 
 app.get('/toVote', function(req, res){
-  Todo.find({}, function(err, todos) {
-    res.render('vote', {
-      title: 'vote now',
-      user: req.session.items,
-      todos: todos,
-      showResult: false,
-      errors: req.session.errors,
+  var date = new Date();
+  Daily.findOne({created_at: date.toDateString(), voteName: req.session.items.name}, function(err, daily){
+    if(!daily){
+      daily = new Daily();
+      daily.voteName = req.session.items.name;
+      daily.save(function(err){});
+      console.log(date.toDateString());
+      console.log("add new daily");
+    }
+    else {
+      console.log("user daily exist");
+    }
+    
+    console.log(daily);
+    if(daily.want && daily.dont){
+      res.redirect('/endVote');
+      console.log("did vote");
+      return;
+    }
+
+    Todo.find({}, function(err, todos) {
+      res.render('vote', {
+        title: 'vote now',
+        user: req.session.items,
+        todos: todos,
+        showResult: false,
+        errors: req.session.errors,
+      });
     });
   });
 });
@@ -101,45 +122,69 @@ app.post('/voted',function(req, res)
 {
   var select=req.body;
 //  console.log(req.body.moodHid);
-  if(select.mood instanceof Array){
-    var j=0;
-    for(var i=0; i<select.mood.length; i++){
-      Todo.findById(select.moodHid[i], function(err, todo){  
-        if(select.mood[j]=='Want'){
-          todo.wantUsers.push(req.session.items.name);
-          todo.save(function(err){
-            if (err) console.log('ERROR:' + err);
-            req.session.errors = [err];
+  var date = new Date();
+  Daily.findOne({created_at: date.toDateString(), voteName: req.session.items.name}, function(err, daily){
+      
+    if(select.mood instanceof Array){
+        var j=0;
+        for(var i=0; i<select.mood.length; i++){
+          Todo.findById(select.moodHid[i], function(err, todo){  
+            if(select.mood[j]=='Want'){
+              todo.wantUsers.push(req.session.items.name);
+              todo.save(function(err){
+                if (err) console.log('ERROR:' + err);
+                req.session.errors = [err];
+              });
+              daily.want = todo.memo;     
+              daily.save(function(err){});
+            }
+            if(select.mood[j]=='Dont'){
+              todo.dontUsers.push(req.session.items.name);
+              todo.save(function(err){
+                if (err) console.log('ERROR:' + err);
+                req.session.errors = [err];
+              });
+              daily.dont = todo.memo;
+              daily.save(function(err){});
+            }  
+            j++;
           });
         }
-        if(select.mood[j]=='Dont'){
-          todo.dontUsers.push(req.session.items.name);
-          todo.save(function(err){
-            if (err) console.log('ERROR:' + err);
-            req.session.errors = [err];
-          });
-        }  
-        j++;
-      });
-    }
-  }
-  else{
-    
-  }
-
-  res.redirect('/endVote');
+      }
+      else{
+        
+      }
+      res.redirect('/endVote');
+  });
+  
 });
 
 app.get('/endVote', function(req, res){
+  var date = new Date();
+  
   Todo.find({}, function(err, todos) {
-    res.render('vote', {
-      title: 'vote end',
-      user: req.session.items,
-      todos: todos,
-      showResult: true,
-      errors: req.session.errors,
+    Daily.find({created_at: date.toDateString()}, function(err, daily) {
+      res.render('vote', {
+        title: 'vote end',
+        user: req.session.items,
+        todos:todos,
+        daily: daily,
+        showResult: true,
+        errors: req.session.errors,
+      });
+      console.log(daily);
     });
   });
+  
+//  Todo.find({}, function(err, todos) {
+//    res.render('vote', {
+//      title: 'vote end',
+//      user: req.session.items,
+//      todos: todos,
+//      showResult: true,
+//      errors: req.session.errors,
+//    });
+//  });
 });
 
 app.get('/toResigter', function(req, res){
@@ -256,7 +301,15 @@ app.post('/userManage', function(req, res){
   
   if(delUser instanceof Array){
     for(var i=0; i<delUser.length; i++){
-      ResigUser.findById(delUser[i], function(err, user) {    
+      ResigUser.findById(delUser[i], function(err, user) {  
+        Daily.find({voteName: user.name}, function(err, daily){
+          console.log("user voted daily :");
+          console.log(daily);
+          for(var i=0; i<daily.length; i++){
+            daily[i].remove(function(err) {});
+          }
+        });
+          
         if (err) {
           console(err);
           res.send('Post not found');
@@ -273,6 +326,13 @@ app.post('/userManage', function(req, res){
   }
   else {
     ResigUser.findById(delUser, function(err, user) {
+      Daily.find({voteName: user.name}, function(err, daily){
+        console.log("user voted daily :");
+        console.log(daily);
+        for(var i=0; i<daily.length; i++){
+          daily[i].remove(function(err) {});
+        }
+      });
       if (err) {
         console(err);
         res.send('Post not found');
